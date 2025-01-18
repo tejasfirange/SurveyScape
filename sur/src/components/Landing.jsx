@@ -27,9 +27,9 @@ function Landing() {
         </div>
         <div id="main" className='w-full flex'>
           <div id="heading">
-            <h1 className='px-10 text-[7vw]  mt-[50px] font-semibold text-sky-600'>Survey.</h1>
-            <h1 className='px-10 text-[7vw]  font-semibold text-sky-600'>Visualise.</h1>
-            <h1 className='px-10 text-[7vw]  font-semibold text-sky-600'>Grow.</h1>
+            <h1 className='px-10 text-[15vw] lg:text-[7vw]  mt-[50px] font-semibold text-sky-600'>Survey.</h1>
+            <h1 className='px-10 text-[15vw] lg:text-[7vw]  font-semibold text-sky-600'>Visualise.</h1>
+            <h1 className='px-10 text-[15vw] lg:text-[7vw]  font-semibold text-sky-600'>Grow.</h1>
           </div>
         </div>
     </div>
