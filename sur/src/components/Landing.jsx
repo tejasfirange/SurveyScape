@@ -1,13 +1,36 @@
 import React from 'react'
+import gsap from 'gsap'
+import { useGSAP} from '@gsap/react'
+import { use } from 'react'
 
 function Landing() {
   return (
-    <div className='w-full  h-screen bg-[url("https://images.unsplash.com/photo-1619252584172-a83a949b6efd?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")] bg-no-repeat bg-cover'>
-        <div className='w-full py-10 px-10 relative '>
-            <div className="name flex absolute top-[0] ">
-              <h1 className='text-[2.5vw] font-bold absolute z-20 text-[#4a17f0d5]'>Survey</h1>
-              <h3 className='text-[2.5vw] font-semibold mt-5 text-[#1b181898] absolute -top-[0vw] left-[5vw]'>Scape</h3>
-            </div>
+    <div className='w-full  h-screen bg-[#1c1c1c]'>
+        <div className='w-full py-5 lg:px-10 px-5 relative flex items-center justify-between'>
+            <div className='hidden lg:flex text-2xl gap-[20px] text-zinc-500 font-semibold'>
+             <a href="">
+              <h1> Contribute </h1>
+            </a> 
+           </div>
+           <div className="name lg:mx-auto">
+              <h1   className='lg:text-[40px] text-[30px] leading-tight font-bold text-[#3c3c96]'>Survey</h1>
+              <h4   className='lg:text-[25px] text-[20px] font-semibold leading-tight -mt-[15px] text-[#412bcc] ml-[90px] lg:ml-[120px]'>Scape</h4>
+           </div>
+            <i className="ri-menu-5-line block text-[30px] text-black lg:hidden"></i>
+           <div className='hidden lg:flex text-2xl gap-[20px] text-zinc-500 font-semibold'>
+            <a href="#"><h1>Works</h1></a>
+            <a href="#"><h1>Contact</h1></a>
+            
+            
+          
+           </div>
+        </div>
+        <div id="main" className='w-full flex'>
+          <div id="heading">
+            <h1 className='px-10 text-[7vw]  mt-[50px] font-semibold text-sky-600'>Survey.</h1>
+            <h1 className='px-10 text-[7vw]  font-semibold text-sky-600'>Visualise.</h1>
+            <h1 className='px-10 text-[7vw]  font-semibold text-sky-600'>Grow.</h1>
+          </div>
         </div>
     </div>
   )
