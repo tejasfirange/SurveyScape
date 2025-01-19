@@ -1,5 +1,3 @@
----
-
 # Survey Scape
 
 **Survey Scape** is a powerful survey management website that allows users to create, distribute, and analyze surveys effortlessly. Whether you need feedback for a product, conduct research, or just gather opinions, Survey Scape has got you covered.
@@ -94,5 +92,3 @@ We welcome contributions from the community! To contribute:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
