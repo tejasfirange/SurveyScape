@@ -18,34 +18,6 @@
 - **Real-time Analytics:** View responses and data visualizations in real-time.
 - **Export Data:** Export survey results to CSV or Excel for further analysis.
 
-## Installation
-
-To install Survey Scape locally, follow these steps:
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/yourusername/survey-scape.git
-   ```
-
-2. Navigate to the project directory:
-
-   ```bash
-   cd survey-scape
-   ```
-
-3. Install the required dependencies:
-
-   ```bash
-   npm install
-   ```
-
-4. Run the application:
-
-   ```bash
-   npm start
-   ```
-
 ## Usage
 
 ### Create a Survey
