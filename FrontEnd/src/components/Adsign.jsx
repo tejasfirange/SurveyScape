@@ -3,7 +3,7 @@ import React from 'react'
 function Adsign() {
   return (
     <div id='sign-back' className='w-full h-screen  '>
-        <div className='sigcard w-[90%] h-[95%] lg:w-[25%] p-5 lg:p-10 lg:h-[70%] bg-[#afa5a57d] rounded-[20px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] '>
+        <div className='sigcard w-[90%] h-fit lg:w-[25%] p-5 lg:p-10 lg:h-fit bg-[#afa5a522] rounded-[20px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] '>
             <h1 className='text-4xl w-[fit-content] tracking-[3px] m-auto font-semibold text-white'>Signup</h1>
 
             <form className='w-full mt-5 flex flex-col justify-center'>
