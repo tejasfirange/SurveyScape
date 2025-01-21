@@ -12,7 +12,7 @@
 }
 
 .main{
-  background-image: radial-gradient( rgb(104, 0, 104), rgb(46, 19, 44),  rgb(0, 0, 0));
+  background-image: radial-gradient( rgb(188, 13, 188), rgb(46, 19, 44),  rgb(0, 0, 0));
 }
 
 #name{
@@ -20,4 +20,8 @@
   -webkit-background-clip: text;
   -webkit-text-stroke: transparent;
   color: transparent;
+}
+
+#card{
+  backdrop-filter: blur(100px);
 }
