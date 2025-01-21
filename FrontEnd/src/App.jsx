@@ -1,11 +1,11 @@
 import React from 'react'
-
+import Adlogin from './components/Admin/Adlogin'
 import Landing from './components/Landing'
-
 function App() {
   return (
     <div>
-      <Landing/>
+      <Adlogin />
+      {/* <Landing/> */}
       
     </div>
   )
