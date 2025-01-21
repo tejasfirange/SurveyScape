@@ -9,6 +9,10 @@
   color: rgb(240, 133, 11);
 }
 
+.main{
+  background-image: radial-gradient( rgb(0, 0, 0), rgb(104, 0, 104), rgb(0, 0, 0));
+}
+
 #name{
   background-image : linear-gradient(-180deg, #ffffff, #b6b6b6, #242424);
   -webkit-background-clip: text;

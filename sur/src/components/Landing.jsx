@@ -5,7 +5,7 @@ import { use } from 'react'
 
 function Landing() {
   return (
-    <div className='w-full  h-screen bg-[#1c1c1c]'>
+    <div className='main w-full  h-screen bg-[#1c1c1c]'>
         <div className='w-full py-5 lg:px-10 px-5 relative flex items-center justify-between'>
             <div className='hidden lg:flex text-2xl gap-[20px] text-zinc-500 font-semibold'>
              <a href="">
