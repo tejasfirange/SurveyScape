@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 *{
-  font-family: "matter";
+  font-family: "Matter";
+}
+::selection {
+  color: rgb(240, 133, 11);
 }
 
+#name{
+  background-image : linear-gradient(-180deg, #ffffff, #b6b6b6, #242424);
+  -webkit-background-clip: text;
+  -webkit-text-stroke: transparent;
+  color: transparent;
+}
