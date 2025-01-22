@@ -31,3 +31,9 @@
   background-image: radial-gradient( rgba(204, 64, 204, 0.363),   rgb(44, 13, 45));
   backdrop-filter: blur(200px);
 }
+
+#sign-back{
+  background-image: url(assets/mount.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
