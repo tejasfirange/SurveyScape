@@ -1,3 +1,5 @@
-flask
-psycopg2
-requests
+Flask==2.0.2
+Flask-Cors==3.0.10
+Flask-SQLAlchemy==2.5.1
+SQLAlchemy-Utils==0.37.8
+bcrypt==4.2.1
