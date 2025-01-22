@@ -39,7 +39,7 @@ function Adlogin() {
 
 return (
 
-    <div className='main w-full  h-screen bg-[#1c1c1c]'>
+    <div className='main w-full relative h-screen bg-[#1c1c1c]'>
           
            <div id='cur' className='hidden md:hidden sm:hidden lg:block w-[30px] h-[30px] z-[999] bg-[#b617ff3d] absolute rounded-full'></div>
            

@@ -33,7 +33,12 @@
 }
 
 #sign-back{
-  background-image: url(assets/mount.jpg);
+  background-image: url(assets/purp.jpg);
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.sigcard{
+  box-shadow: 1px 1px 20px 3px black;
+  backdrop-filter: blur(5px);
 }
