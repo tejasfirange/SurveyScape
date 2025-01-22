@@ -5,15 +5,8 @@ import Adsign from './components/Adsign'
 function App() {
   return (
     <div>
-<<<<<<< HEAD
       <Adlogin />
       <Landing/>
-=======
-      <Adsign />
-      {/* <Adlogin /> */}
-      {/* <Landing/> */}
->>>>>>> main
-      
     </div>
   )
 }
