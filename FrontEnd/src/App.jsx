@@ -5,7 +5,7 @@ function App() {
   return (
     <div>
       <Adlogin />
-      {/* <Landing/> */}
+      <Landing/>
       
     </div>
   )
