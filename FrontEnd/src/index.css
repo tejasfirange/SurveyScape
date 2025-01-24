@@ -33,12 +33,23 @@
 }
 
 #sign-back{
-  background-image: url(assets/purp.jpg);
+  background-image: url(https://static.vecteezy.com/system/resources/previews/027/008/929/non_2x/flat-minimalistic-design-panorama-of-a-mountain-landscape-easy-to-change-colors-vector.jpg);
   background-size: cover;
   background-repeat: no-repeat;
 }
 
 .sigcard{
+  box-shadow: 1px 1px 20px 3px black;
+  backdrop-filter: blur(5px);
+}
+
+.adlogin{
+  background-image: url(https://static.vecteezy.com/system/resources/previews/027/008/929/non_2x/flat-minimalistic-design-panorama-of-a-mountain-landscape-easy-to-change-colors-vector.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.adlogcard{
   box-shadow: 1px 1px 20px 3px black;
   backdrop-filter: blur(5px);
 }
