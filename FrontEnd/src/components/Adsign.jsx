@@ -1,26 +1,47 @@
-import React from 'react'
+import React from 'react';
 
 function Adsign() {
   return (
-    <div id='sign-back' className='w-full h-screen  '>
-        <div className='sigcard w-[90%] h-fit lg:w-fit lg:h-fit lg:px-5 lg:py-10 bg-[#afa5a522] rounded-[20px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] '>
-            <h1 className='text-4xl w-[fit-content] tracking-[3px] m-auto font-semibold text-white'>Signup</h1>
-
-            <form className='w-full mt-5 flex flex-col justify-center'>
-                <input className='w-[290px] md:w-[40%] lg:w-[350px] h-[55px] rounded-full placeholder:text-[#5d6ba0] mt-10 bg-[#ffffff67] mx-auto p-5 text-2xl ' type="text" placeholder='Username'/>
-                <input className='w-[290px] md:w-[40%] lg:w-[350px] h-[55px] rounded-full placeholder:text-[white] mt-10 bg-[#ffffff67] mx-auto p-5 text-2xl' type="email" placeholder='Email'/>
-                <input className='w-[290px] md:w-[40%] lg:w-[350px] h-[55px] rounded-full placeholder:text-[white] mt-10 bg-[#ffffff67]  mx-auto p-5 text-2xl' type="password" placeholder='Password' />
-                <button className='w-[290px] lg:w-[350px] h-[55px] rounded-full mt-10 mb-10 mx-auto text-3xl text-white font-semibold bg-green-500' >Sign Up</button>
-                <div className='w-[290px] lg:w-[350px] h-[1.5px] bg-[#d6d2d2]  mx-auto'></div>
-                <h3 className='text-center text-white text-xl mt-5'>Or Login With</h3>
-                <a href="#">
-                    <img className='w-[40px] mt-5 mx-auto ' src="https://freepnglogo.com/images/all_img/google-g-logo-85b2.png"/>
-                </a>
-
-            </form>
+    <div id="sign-back" className="w-full h-screen bg-gradient-to-r from-[#141e30] to-[#243b55] flex justify-center items-center">
+      <div className="sigcard w-[90%] md:w-[400px] bg-[#1c1c1c88] backdrop-blur-lg rounded-[20px] p-8">
+        <h1 className="text-4xl text-white text-center">Sign Up</h1>
+        <form className="w-full mt-8 flex flex-col space-y-6">
+          <input
+            className="w-full h-[50px] rounded-full placeholder:text-white bg-[#ffffff22] text-white px-5 text-lg outline-none focus:ring-2 focus:ring-[#3ac47d]"
+            type="text"
+            placeholder="UserName"
+          />
+          <input
+            className="w-full h-[50px] rounded-full placeholder:text-white bg-[#ffffff22] text-white px-5 text-lg outline-none focus:ring-2 focus:ring-[#3ac47d]"
+            type="email"
+            placeholder="Email"
+          />
+          <input
+            className="w-full h-[50px] rounded-full placeholder:text-white bg-[#ffffff22] text-white px-5 text-lg outline-none focus:ring-2 focus:ring-[#3ac47d]"
+            type="password"
+            placeholder="Password"
+          />
+          <button className="w-full h-[50px] bg-[#3ac47d] text-white text-lg font-semibold rounded-full hover:bg-[#21888b]">
+            Create Account
+          </button>
+        </form>
+        <div className="flex items-center justify-center mt-6">
+          <div className="h-[1px] w-[40%] bg-gray-500"></div>
+          <span className="text-gray-300 mx-4 text-center">or sign up with</span>
+          <div className="h-[1px] w-[40%] bg-gray-500"></div>
         </div>
+        <div className="flex justify-center mt-6">
+          <a href="#">
+            <img
+              className="w-[40px] h-[40px]"
+              src="https://freepnglogo.com/images/all_img/google-g-logo-85b2.png"
+              alt="Google Sign In"
+            />
+          </a>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Adsign
+export default Adsign;
