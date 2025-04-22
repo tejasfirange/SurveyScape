@@ -1,0 +1,220 @@
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1c1c1c 0%, #4a1c4a 50%, #2d1c2d 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(128, 0, 128, 0.15) 0%, rgba(28, 28, 28, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 0;
+}
+
+.glass-card {
+    background: rgba(28, 28, 28, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.25rem;
+    width: 100%;
+    max-width: 320px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    position: relative;
+    z-index: 1;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-radius: 20px;
+    z-index: -1;
+}
+
+.glass-header {
+    text-align: center;
+    margin-bottom: 1.25rem;
+}
+
+.glass-header h1 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    background: linear-gradient(45deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+.glass-header p {
+    color: #e0e0e0;
+    font-size: 0.85rem;
+}
+
+.glass-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    color: #e0e0e0;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    color: #ffffff;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.glass-button {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.glass-button.primary {
+    background: #ffffff;
+    color: #1c1c1c;
+    border: none;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.glass-button.primary:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.glass-button.google {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-button.google:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.glass-button img {
+    width: 16px;
+    height: 16px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0.6rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.divider span {
+    padding: 0 0.6rem;
+}
+
+.error-message {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff6b6b;
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.8rem;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.glass-footer {
+    text-align: center;
+    margin-top: 1rem;
+    color: #e0e0e0;
+    font-size: 0.85rem;
+}
+
+.glass-footer a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.glass-footer a:hover {
+    color: #e0e0e0;
+}
+
+@media (max-width: 640px) {
+    .glass-card {
+        margin: 1rem;
+        padding: 1rem;
+        max-width: 300px;
+    }
+
+    .glass-header h1 {
+        font-size: 1.35rem;
+    }
+} 

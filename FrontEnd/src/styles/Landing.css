@@ -1,0 +1,264 @@
+.main {
+    background-color: #1c1c1c;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.name {
+    letter-spacing: 18px;
+    transform: translateX(-50%);
+    position: absolute;
+    left: 50%;
+}
+
+.name h1 {
+    font-size: 40px;
+    font-weight: bold;
+    color: silver;
+    transition: transform 0.3s;
+}
+
+.name h1:hover {
+    transform: scale(1.1);
+}
+
+.name h4 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: -5px;
+    margin-left: 130px;
+    color: silver;
+    transition: transform 0.3s;
+}
+
+.name h4:hover {
+    transform: scale(1.1);
+}
+
+/* Text animations */
+@keyframes metallicShine {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .name h1 {
+        font-size: 30px;
+    }
+    
+    .name h4 {
+        font-size: 20px;
+        margin-left: 90px;
+    }
+}
+
+/* Navigation styles */
+.nav-link {
+    color: #666;
+    font-size: 24px;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: silver;
+}
+
+/* Button styles */
+.get-started-btn {
+    background-color: silver;
+    color: #1c1c1c;
+    font-weight: bold;
+    padding: 16px 32px;
+    border-radius: 9999px;
+    font-size: 20px;
+    transition: all 0.3s;
+    transform: translateY(0);
+    box-shadow: 0 0 0 rgba(192, 192, 192, 0);
+}
+
+.get-started-btn:hover {
+    background-color: #d4d4d4;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(192, 192, 192, 0.5);
+}
+
+/* Chart animations */
+@keyframes chartAppear {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 0.1;
+    }
+}
+
+.chart {
+    animation: chartAppear 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Mobile menu */
+.mobile-menu {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .mobile-menu {
+        display: block;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+}
+
+.landing {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.landing-nav {
+    background: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-link.primary {
+    background-color: #2563eb;
+    color: white;
+}
+
+.nav-link.primary:hover {
+    background-color: #1d4ed8;
+}
+
+.landing-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    color: #4b5563;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.cta-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.cta-button.secondary {
+    background-color: white;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+}
+
+.cta-button.secondary:hover {
+    background-color: #f3f4f6;
+}
+
+.features-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    color: #1f2937;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .hero-section p {
+        font-size: 1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    .landing-nav {
+        padding: 1rem;
+    }
+
+    .nav-links {
+        gap: 0.5rem;
+    }
+} 

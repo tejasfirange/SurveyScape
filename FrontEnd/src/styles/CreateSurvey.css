@@ -1,0 +1,232 @@
+.create-survey {
+    min-height: 100vh;
+    background-color: #2D1B33;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background-color: #8B1EDE;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Roboto Slab', serif;
+}
+
+.nav-brand {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #ffffff;
+    text-decoration: none;
+    font-family: 'Roboto Slab', serif;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-email {
+    color: #ffffff;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.back-btn, .logout-btn {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.back-btn:hover, .logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.create-survey-content {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+.create-survey-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.create-survey-header h1 {
+    color: #ffffff;
+    font-size: 2rem;
+}
+
+.survey-form {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #8B1EDE;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #ffffff;
+    color: #000000;
+    cursor: pointer;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #8B1EDE;
+}
+
+.form-group select option {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 0.75rem;
+}
+
+.question-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.question-header h3 {
+    color: #ffffff;
+    margin: 0;
+}
+
+.remove-btn {
+    background-color: rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.remove-btn:hover {
+    background-color: rgba(255, 68, 68, 0.3);
+}
+
+.options-group {
+    margin-top: 1rem;
+}
+
+.options-group h4 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.option-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.option-item input {
+    flex: 1;
+}
+
+.add-btn {
+    background-color: #8B1EDE;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 1rem 0;
+}
+
+.add-btn:hover {
+    background-color: #7B1BC4;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.submit-btn {
+    background-color: #8B1EDE;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #7B1BC4;
+}
+
+.error-message {
+    background-color: rgba(255, 68, 68, 0.1);
+    color: #ff4444;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+.success-message {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+} 

@@ -1,0 +1,237 @@
+import React, { useState, useEffect } from 'react';
+import { fetchUserSurveys } from '../services/surveyService';
+import { Box, CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import EditIcon from '@mui/icons-material/Edit';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+
+const SurveyList = () => {
+    const [surveys, setSurveys] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const loadSurveys = async () => {
+            try {
+                const userSurveys = await fetchUserSurveys();
+                setSurveys(userSurveys || []);
+                setLoading(false);
+            } catch (err) {
+                console.error('Failed to load surveys:', err);
+                setError('Failed to load surveys. Please try again later.');
+                setLoading(false);
+            }
+        };
+
+        loadSurveys();
+    }, []);
+
+    const handleCopyLink = (surveyId, event) => {
+        event.stopPropagation();
+        const surveyUrl = `${window.location.origin}/survey/${surveyId}`;
+        navigator.clipboard.writeText(surveyUrl);
+        // You could add a toast notification here
+    };
+
+    const handleEdit = (surveyId, event) => {
+        event.stopPropagation();
+        navigate(`/edit-survey/${surveyId}`);
+    };
+
+    const handleAnalytics = (surveyId, event) => {
+        event.stopPropagation();
+        navigate(`/survey-analytics/${surveyId}`);
+    };
+
+    const toggleSurveyStatus = async (surveyId, currentStatus, event) => {
+        event.stopPropagation();
+        try {
+            const response = await fetch(`/survey/toggle-status/${surveyId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ is_active: !currentStatus })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to toggle survey status');
+            }
+
+            // Update local state
+            setSurveys(surveys.map(survey => 
+                survey.id === surveyId 
+                    ? { ...survey, is_active: !survey.is_active }
+                    : survey
+            ));
+        } catch (error) {
+            console.error('Error toggling survey status:', error);
+        }
+    };
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+                <CircularProgress sx={{ color: 'white' }} />
+            </Box>
+        );
+    }
+
+    if (error) {
+        return (
+            <Box sx={{ 
+                p: 4,
+                bgcolor: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '16px',
+                textAlign: 'center',
+                color: '#ff6b6b'
+            }}>
+                {error}
+            </Box>
+        );
+    }
+
+    if (!surveys || surveys.length === 0) {
+        return (
+            <Box sx={{ 
+                p: 6,
+                bgcolor: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '16px',
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2
+            }}>
+                <Box sx={{ 
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    color: 'white'
+                }}>
+                    No Surveys Yet
+                </Box>
+                <Box sx={{ 
+                    fontSize: '16px',
+                    color: 'rgba(255, 255, 255, 0.8)'
+                }}>
+                    Create your first survey to get started!
+                </Box>
+            </Box>
+        );
+    }
+
+    return (
+        <Box sx={{ 
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: 3
+        }}>
+            {surveys.map((survey) => (
+                <Box 
+                    key={survey.id} 
+                    onClick={() => navigate(`/survey-details/${survey.id}`)}
+                    sx={{
+                        p: 3,
+                        bgcolor: 'rgba(255, 255, 255, 0.1)',
+                        borderRadius: '16px',
+                        transition: 'all 0.2s ease-in-out',
+                        cursor: 'pointer',
+                        '&:hover': {
+                            transform: 'translateY(-4px)',
+                            bgcolor: 'rgba(255, 255, 255, 0.15)'
+                        }
+                    }}
+                >
+                    <Box sx={{ 
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        color: 'white',
+                        mb: 2
+                    }}>
+                        {survey.title}
+                    </Box>
+                    <Box sx={{ 
+                        fontSize: '14px',
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        mb: 1
+                    }}>
+                        Created: {new Date(survey.created_at).toLocaleDateString()}
+                    </Box>
+                    <Box sx={{ 
+                        fontSize: '14px',
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        mb: 1
+                    }}>
+                        Questions: {survey.questions ? survey.questions.length : 0}
+                    </Box>
+                    <Box sx={{ 
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        fontSize: '14px',
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        mb: 2,
+                        cursor: 'pointer'
+                    }}
+                    onClick={(e) => toggleSurveyStatus(survey.id, survey.is_active, e)}
+                    >
+                        <Box sx={{
+                            width: 10,
+                            height: 10,
+                            borderRadius: '50%',
+                            bgcolor: survey.is_active ? '#4CAF50' : '#f44336',
+                            transition: 'background-color 0.3s ease'
+                        }} />
+                        Status: {survey.is_active ? 'Active' : 'Inactive'}
+                    </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        gap: 1,
+                        justifyContent: 'flex-end',
+                        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                        pt: 2
+                    }}>
+                        <Tooltip title="Copy Survey Link">
+                            <IconButton 
+                                onClick={(e) => handleCopyLink(survey.id, e)}
+                                sx={{ 
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    '&:hover': { color: 'white' }
+                                }}
+                            >
+                                <ContentCopyIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit Survey">
+                            <IconButton 
+                                onClick={(e) => handleEdit(survey.id, e)}
+                                sx={{ 
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    '&:hover': { color: 'white' }
+                                }}
+                            >
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="View Analytics">
+                            <IconButton 
+                                onClick={(e) => handleAnalytics(survey.id, e)}
+                                sx={{ 
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    '&:hover': { color: 'white' }
+                                }}
+                            >
+                                <AnalyticsIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </Box>
+            ))}
+        </Box>
+    );
+};
+
+export default SurveyList; 

@@ -21,20 +21,6 @@ function Adlogin() {
           </button>
           <a href="#" className="text-gray-300 text-sm text-center mt-2 hover:text-green-500">Forgot Password?</a>
         </form>
-        <div className="flex items-center justify-center mt-6">
-          <div className="h-[1px] w-[40%] bg-gray-500"></div>
-          <span className="text-gray-300 mx-4 text-center">or log-in with</span>
-          <div className="h-[1px] w-[40%] bg-gray-500"></div>
-        </div>
-        <div className="flex justify-center mt-6">
-          <a href="#">
-            <img
-              className="w-[40px] h-[40px]"
-              src="https://freepnglogo.com/images/all_img/google-g-logo-85b2.png"
-              alt="Google Sign In"
-            />
-          </a>
-        </div>
       </div>
     </div>
   );
