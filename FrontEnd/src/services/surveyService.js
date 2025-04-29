@@ -38,6 +38,35 @@ export const fetchSurveyById = async (id) => {
     }
 };
 
+export const submitSurveyResponse = async (surveyId, responses) => {
+    try {
+        console.log('Submitting survey responses for survey:', surveyId);
+        const response = await fetch('/survey/submit-response', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                surveyId,
+                responses
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to submit survey response');
+        }
+
+        const data = await response.json();
+        console.log('Survey response submitted successfully:', data);
+        return data;
+    } catch (error) {
+        console.error('Error submitting survey response:', error);
+        throw error;
+    }
+};
+
 export const updateSurvey = async (surveyId, surveyData) => {
     try {
         console.log(`Updating survey ${surveyId} with data:`, surveyData);

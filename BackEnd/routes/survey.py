@@ -161,7 +161,7 @@ def get_survey(survey_id):
         logger.error(f"Error fetching survey: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
 
-@survey.route('/<int:survey_id>', methods=['PUT'])
+@survey.route('/<survey_id>', methods=['PUT'])
 def update_survey(survey_id):
     try:
         # Check if user is authenticated
@@ -170,63 +170,48 @@ def update_survey(survey_id):
             logger.error("Unauthorized attempt to update survey")
             return jsonify({'error': 'Unauthorized'}), 401
 
-        survey = Survey.query.get(survey_id)
-        if not survey:
-            logger.error(f"Survey not found with ID: {survey_id}")
+        user = User.query.get(user_id)
+        if not user:
+            logger.error(f"User not found for ID: {user_id}")
+            return jsonify({'error': 'User not found'}), 404
+
+        # Get the survey from user's surveys_generated
+        if not user.surveys_generated or 'surveys' not in user.surveys_generated:
+            logger.error(f"No surveys found for user: {user_id}")
             return jsonify({'error': 'Survey not found'}), 404
 
-        # Check if the user owns this survey
-        if survey.user_id != user_id:
-            logger.error(f"User {user_id} attempted to edit survey {survey_id} owned by user {survey.user_id}")
-            return jsonify({'error': 'Unauthorized'}), 403
+        surveys = user.surveys_generated['surveys']
+        if str(survey_id) not in surveys:
+            logger.error(f"Survey not found with ID: {survey_id}")
+            return jsonify({'error': 'Survey not found'}), 404
 
         data = request.get_json()
         logger.info(f"Received update data for survey {survey_id}: {data}")
 
-        # Update survey fields
-        survey.title = data.get('title', survey.title)
-        survey.description = data.get('description', survey.description)
+        # Update survey data
+        survey_data = surveys[str(survey_id)]
+        survey_data.update({
+            'title': data.get('title', survey_data['title']),
+            'description': data.get('description', survey_data['description']),
+            'questions': data.get('questions', survey_data['questions'])
+        })
 
-        # Handle questions update
-        if 'questions' in data:
-            # Remove existing questions
-            for question in survey.questions:
-                db.session.delete(question)
-            
-            # Add new questions
-            for question_data in data['questions']:
-                new_question = Question(
-                    survey_id=survey.id,
-                    text=question_data['text'],
-                    type=question_data['type'],
-                    options=question_data.get('options')
-                )
-                db.session.add(new_question)
+        # Mark the field as modified since we're updating a JSON field
+        flag_modified(user, 'surveys_generated')
 
-        db.session.commit()
-        logger.info(f"Successfully updated survey {survey_id}")
-
-        return jsonify({
-            'message': 'Survey updated successfully',
-            'survey': {
-                'id': survey.id,
-                'title': survey.title,
-                'description': survey.description,
-                'questions': [
-                    {
-                        'id': q.id,
-                        'text': q.text,
-                        'type': q.type,
-                        'options': q.options
-                    } for q in survey.questions
-                ],
-                'created_at': survey.created_at.isoformat(),
-                'user_id': survey.user_id
-            }
-        }), 200
+        try:
+            db.session.commit()
+            logger.info(f"Survey {survey_id} updated successfully")
+            return jsonify({
+                'message': 'Survey updated successfully',
+                'survey': survey_data
+            }), 200
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Database error while updating survey: {str(e)}")
+            return jsonify({'error': 'Database error'}), 500
 
     except Exception as e:
-        db.session.rollback()
         logger.error(f"Error updating survey: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
 

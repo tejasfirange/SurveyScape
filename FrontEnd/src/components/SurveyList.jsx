@@ -33,7 +33,7 @@ const SurveyList = () => {
 
     const handleCopyLink = (surveyId, event) => {
         event.stopPropagation();
-        const surveyUrl = `${window.location.origin}/survey/${surveyId}`;
+        const surveyUrl = `${window.location.origin}/fill-survey/${surveyId}`;
         navigator.clipboard.writeText(surveyUrl);
         // You could add a toast notification here
     };
@@ -215,51 +215,58 @@ const SurveyList = () => {
                     </Box>
                     <Box sx={{
                         display: 'flex',
-                        gap: 1,
                         justifyContent: 'flex-end',
-                        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                        pt: 2
+                        gap: 1,
+                        mt: 2
                     }}>
                         <Tooltip title="Copy Survey Link">
-                            <IconButton 
+                            <IconButton
                                 onClick={(e) => handleCopyLink(survey.id, e)}
-                                sx={{ 
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                    '&:hover': { color: 'white' }
+                                sx={{
+                                    color: 'white',
+                                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
                                 }}
+                                size="small"
                             >
                                 <ContentCopyIcon />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Edit Survey">
-                            <IconButton 
+                            <IconButton
                                 onClick={(e) => handleEdit(survey.id, e)}
-                                sx={{ 
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                    '&:hover': { color: 'white' }
+                                sx={{
+                                    color: 'white',
+                                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
                                 }}
+                                size="small"
                             >
                                 <EditIcon />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title="View Analytics">
-                            <IconButton 
+                        <Tooltip title="View Analysis">
+                            <IconButton
                                 onClick={(e) => handleAnalytics(survey.id, e)}
-                                sx={{ 
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                    '&:hover': { color: 'white' }
+                                sx={{
+                                    color: 'white',
+                                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
                                 }}
+                                size="small"
                             >
                                 <AnalyticsIcon />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete Survey">
-                            <IconButton 
+                            <IconButton
                                 onClick={(e) => handleDeleteClick(survey.id, e)}
-                                sx={{ 
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                    '&:hover': { color: '#ff4444' }
+                                sx={{
+                                    color: '#ff6b6b',
+                                    bgcolor: 'rgba(255, 99, 99, 0.1)',
+                                    '&:hover': { bgcolor: 'rgba(255, 99, 99, 0.2)' }
                                 }}
+                                size="small"
                             >
                                 <DeleteIcon />
                             </IconButton>

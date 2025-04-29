@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, TextField, Button, Typography, CircularProgress } from '@mui/material';
+import { Box, TextField, Button, Typography, CircularProgress, IconButton } from '@mui/material';
 import { fetchSurveyById, updateSurvey } from '../services/surveyService';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 const EditSurvey = () => {
     const { id } = useParams();
@@ -18,7 +20,14 @@ const EditSurvey = () => {
         const loadSurvey = async () => {
             try {
                 const survey = await fetchSurveyById(id);
-                setSurveyData(survey);
+                // Map radio to single-choice and checkbox to multiple-choice
+                const mappedQuestions = survey.questions.map(q => ({
+                    ...q,
+                    type: q.type === 'radio' ? 'single-choice' : 
+                          q.type === 'checkbox' ? 'multiple-choice' : q.type,
+                    options: q.options || []
+                }));
+                setSurveyData({...survey, questions: mappedQuestions});
                 setLoading(false);
             } catch (err) {
                 console.error('Error loading survey:', err);
@@ -34,7 +43,42 @@ const EditSurvey = () => {
         const updatedQuestions = [...surveyData.questions];
         updatedQuestions[index] = {
             ...updatedQuestions[index],
-            [field]: value
+            [field]: value,
+            // Initialize options array if switching to choice type
+            options: field === 'type' && 
+                    (value === 'single-choice' || value === 'multiple-choice') && 
+                    !updatedQuestions[index].options ? 
+                    [''] : updatedQuestions[index].options
+        };
+        setSurveyData({ ...surveyData, questions: updatedQuestions });
+    };
+
+    const handleOptionChange = (questionIndex, optionIndex, value) => {
+        const updatedQuestions = [...surveyData.questions];
+        const options = [...updatedQuestions[questionIndex].options];
+        options[optionIndex] = value;
+        updatedQuestions[questionIndex] = {
+            ...updatedQuestions[questionIndex],
+            options
+        };
+        setSurveyData({ ...surveyData, questions: updatedQuestions });
+    };
+
+    const addOption = (questionIndex) => {
+        const updatedQuestions = [...surveyData.questions];
+        updatedQuestions[questionIndex] = {
+            ...updatedQuestions[questionIndex],
+            options: [...(updatedQuestions[questionIndex].options || []), '']
+        };
+        setSurveyData({ ...surveyData, questions: updatedQuestions });
+    };
+
+    const removeOption = (questionIndex, optionIndex) => {
+        const updatedQuestions = [...surveyData.questions];
+        const options = updatedQuestions[questionIndex].options.filter((_, i) => i !== optionIndex);
+        updatedQuestions[questionIndex] = {
+            ...updatedQuestions[questionIndex],
+            options
         };
         setSurveyData({ ...surveyData, questions: updatedQuestions });
     };
@@ -57,7 +101,13 @@ const EditSurvey = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await updateSurvey(id, surveyData);
+            // Map single-choice to radio and multiple-choice to checkbox before saving
+            const mappedQuestions = surveyData.questions.map(q => ({
+                ...q,
+                type: q.type === 'single-choice' ? 'radio' : 
+                      q.type === 'multiple-choice' ? 'checkbox' : q.type
+            }));
+            await updateSurvey(id, {...surveyData, questions: mappedQuestions});
             navigate('/dashboard');
         } catch (err) {
             console.error('Error updating survey:', err);
@@ -222,13 +272,54 @@ const EditSurvey = () => {
                                         border: '1px solid rgba(255, 255, 255, 0.2)',
                                         borderRadius: '4px',
                                         color: 'black',
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        marginBottom: '20px'
                                     }}
                                 >
                                     <option value="text">Text</option>
-                                    <option value="multiple_choice">Multiple Choice</option>
-                                    <option value="single_choice">Single Choice</option>
+                                    <option value="single-choice">Single Choice</option>
+                                    <option value="multiple-choice">Multiple Choice</option>
                                 </select>
+
+                                {(question.type === 'single-choice' || question.type === 'multiple-choice') && (
+                                    <Box sx={{ mt: 2 }}>
+                                        <Typography sx={{ mb: 1, color: 'white' }}>Options</Typography>
+                                        {question.options?.map((option, optionIndex) => (
+                                            <Box key={optionIndex} sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                                                <input
+                                                    value={option}
+                                                    onChange={(e) => handleOptionChange(index, optionIndex, e.target.value)}
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '10px',
+                                                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                        borderRadius: '4px',
+                                                        color: 'white'
+                                                    }}
+                                                    placeholder={`Option ${optionIndex + 1}`}
+                                                />
+                                                <IconButton
+                                                    onClick={() => removeOption(index, optionIndex)}
+                                                    sx={{ color: '#ff6b6b' }}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Box>
+                                        ))}
+                                        <Button
+                                            onClick={() => addOption(index)}
+                                            startIcon={<AddIcon />}
+                                            sx={{
+                                                color: 'white',
+                                                bgcolor: 'rgba(255, 255, 255, 0.1)',
+                                                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
+                                            }}
+                                        >
+                                            Add Option
+                                        </Button>
+                                    </Box>
+                                )}
                             </Box>
                         ))}
 
@@ -249,8 +340,8 @@ const EditSurvey = () => {
                                 onClick={() => navigate('/dashboard')}
                                 sx={{
                                     color: 'white',
-                                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' }
+                                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
                                 }}
                             >
                                 Cancel

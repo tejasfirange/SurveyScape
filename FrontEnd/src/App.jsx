@@ -9,6 +9,8 @@ import DBViewer from './components/DBViewer';
 import CreateSurvey from './components/CreateSurvey';
 import EditSurvey from './components/EditSurvey';
 import SurveyDetails from './components/SurveyDetails';
+import SurveyFill from './components/SurveyFill';
+import SurveyAnalysis from './components/SurveyAnalysis';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -47,6 +49,16 @@ function App() {
           <Route path="/survey-details/:id" element={
             <PrivateRoute>
               <SurveyDetails />
+            </PrivateRoute>
+          } />
+          <Route path="/fill-survey/:id" element={
+            <PrivateRoute>
+              <SurveyFill />
+            </PrivateRoute>
+          } />
+          <Route path="/survey-analytics/:id" element={
+            <PrivateRoute>
+              <SurveyAnalysis />
             </PrivateRoute>
           } />
         </Routes>
