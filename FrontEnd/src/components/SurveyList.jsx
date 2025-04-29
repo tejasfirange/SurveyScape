@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { fetchUserSurveys } from '../services/surveyService';
-import { Box, CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
+import { fetchUserSurveys, deleteSurvey } from '../services/surveyService';
+import { Box, CircularProgress, IconButton, Tooltip, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const SurveyList = () => {
     const [surveys, setSurveys] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [surveyToDelete, setSurveyToDelete] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,6 +46,29 @@ const SurveyList = () => {
     const handleAnalytics = (surveyId, event) => {
         event.stopPropagation();
         navigate(`/survey-analytics/${surveyId}`);
+    };
+
+    const handleDeleteClick = (surveyId, event) => {
+        event.stopPropagation();
+        setSurveyToDelete(surveyId);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        try {
+            await deleteSurvey(surveyToDelete);
+            setSurveys(surveys.filter(survey => survey.id !== surveyToDelete));
+            setDeleteDialogOpen(false);
+            setSurveyToDelete(null);
+        } catch (error) {
+            console.error('Failed to delete survey:', error);
+            setError('Failed to delete survey. Please try again.');
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteDialogOpen(false);
+        setSurveyToDelete(null);
     };
 
     const toggleSurveyStatus = async (surveyId, currentStatus, event) => {
@@ -227,9 +253,61 @@ const SurveyList = () => {
                                 <AnalyticsIcon />
                             </IconButton>
                         </Tooltip>
+                        <Tooltip title="Delete Survey">
+                            <IconButton 
+                                onClick={(e) => handleDeleteClick(survey.id, e)}
+                                sx={{ 
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    '&:hover': { color: '#ff4444' }
+                                }}
+                            >
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 </Box>
             ))}
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog
+                open={deleteDialogOpen}
+                onClose={handleDeleteCancel}
+                PaperProps={{
+                    sx: {
+                        bgcolor: '#2A2A2A',
+                        color: 'white',
+                        minWidth: '300px'
+                    }
+                }}
+            >
+                <DialogTitle>Delete Survey</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Are you sure you want to delete this survey? This action cannot be undone.
+                    </Typography>
+                </DialogContent>
+                <DialogActions sx={{ p: 2 }}>
+                    <Button 
+                        onClick={handleDeleteCancel}
+                        sx={{ 
+                            color: 'white',
+                            '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' }
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button 
+                        onClick={handleDeleteConfirm}
+                        sx={{ 
+                            bgcolor: '#ff4444',
+                            color: 'white',
+                            '&:hover': { bgcolor: '#ff6666' }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };

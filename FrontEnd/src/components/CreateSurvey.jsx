@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/CreateSurvey.css';
@@ -6,6 +6,7 @@ import '../styles/CreateSurvey.css';
 const CreateSurvey = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const isSubmittingRef = useRef(false);
     const [survey, setSurvey] = useState({
         title: '',
         description: '',
@@ -17,6 +18,7 @@ const CreateSurvey = () => {
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleAddQuestion = () => {
         setSurvey(prev => ({
@@ -80,7 +82,18 @@ const CreateSurvey = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Use ref to guarantee atomic check of submission state
+        if (isSubmittingRef.current) {
+            console.log('Submission already in progress, preventing duplicate submission');
+            return;
+        }
+
         try {
+            isSubmittingRef.current = true;
+            setIsSubmitting(true);
+            setError('');
+            
             // Validate survey data
             if (!survey.title.trim()) {
                 setError('Survey title is required');
@@ -108,11 +121,8 @@ const CreateSurvey = () => {
             }
 
             console.log('All validations passed, preparing to send data');
-            console.log('Sending survey data:', JSON.stringify(survey, null, 2));
 
             const apiUrl = 'http://localhost:5000/survey/create';
-            console.log('Sending request to:', apiUrl);
-
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -129,12 +139,24 @@ const CreateSurvey = () => {
             }
 
             setSuccess(true);
+            // Disable the form completely after successful submission
+            const form = e.target;
+            form.querySelectorAll('input, button, select, textarea').forEach(element => {
+                element.disabled = true;
+            });
+            
             setTimeout(() => {
                 navigate('/dashboard');
             }, 2000);
         } catch (err) {
             console.error('Error creating survey:', err);
             setError(err.message || 'Failed to create survey');
+        } finally {
+            setIsSubmitting(false);
+            // Small delay before allowing new submissions to prevent rapid consecutive clicks
+            setTimeout(() => {
+                isSubmittingRef.current = false;
+            }, 1000);
         }
     };
 
@@ -255,8 +277,12 @@ const CreateSurvey = () => {
                     </button>
 
                     <div className="form-actions">
-                        <button type="submit" className="submit-btn">
-                            Create Survey
+                        <button 
+                            type="submit" 
+                            className="submit-btn"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Creating Survey...' : 'Create Survey'}
                         </button>
                     </div>
                 </form>

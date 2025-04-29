@@ -87,4 +87,29 @@ export const toggleSurveyStatus = async (surveyId, isActive) => {
         console.error('Error toggling survey status:', error);
         throw error;
     }
+};
+
+export const deleteSurvey = async (surveyId) => {
+    try {
+        console.log('Deleting survey with ID:', surveyId);
+        const response = await fetch(`/survey/delete/${surveyId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to delete survey');
+        }
+
+        const data = await response.json();
+        console.log('Survey deleted successfully:', data);
+        return data;
+    } catch (error) {
+        console.error('Error deleting survey:', error);
+        throw error;
+    }
 }; 

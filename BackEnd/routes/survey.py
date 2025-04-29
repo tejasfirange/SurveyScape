@@ -269,4 +269,38 @@ def toggle_survey_status(survey_id):
 
     except Exception as e:
         logger.error(f"Error toggling survey status: {str(e)}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+@survey.route('/delete/<survey_id>', methods=['DELETE'])
+def delete_survey(survey_id):
+    try:
+        # Check if user is authenticated
+        user_id = session.get('user_id')
+        if not user_id:
+            logger.error("Unauthorized attempt to delete survey")
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        user = User.query.get(user_id)
+        if not user or not user.surveys_generated:
+            logger.error(f"User not found or no surveys for user: {user_id}")
+            return jsonify({'error': 'Survey not found'}), 404
+
+        surveys = user.surveys_generated.get('surveys', {})
+        if str(survey_id) not in surveys:
+            logger.error(f"Survey not found with ID: {survey_id}")
+            return jsonify({'error': 'Survey not found'}), 404
+
+        # Delete the survey
+        del user.surveys_generated['surveys'][str(survey_id)]
+        flag_modified(user, 'surveys_generated')
+        db.session.commit()
+
+        logger.info(f"Survey {survey_id} deleted successfully")
+        return jsonify({
+            'message': 'Survey deleted successfully',
+            'survey_id': survey_id
+        })
+
+    except Exception as e:
+        logger.error(f"Error deleting survey: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500 
