@@ -136,20 +136,19 @@ def get_survey(survey_id):
     try:
         logger.info(f"Fetching survey with ID: {survey_id}")
         
-        # Try to find the survey in the user's surveys_generated
+        # Try to find the survey in all users' surveys_generated
         user_id = session.get('user_id')
         if not user_id:
             logger.error("Unauthorized attempt to fetch survey")
             return jsonify({'error': 'Unauthorized'}), 401
 
-        user = User.query.get(user_id)
-        if not user or not user.surveys_generated:
-            logger.error(f"User not found or no surveys for user: {user_id}")
-            return jsonify({'error': 'Survey not found'}), 404
+        survey_data = None
+        for user in User.query.all():
+            surveys = user.surveys_generated.get('surveys', {}) if user.surveys_generated else {}
+            if str(survey_id) in surveys:
+                survey_data = surveys.get(str(survey_id))
+                break
 
-        surveys = user.surveys_generated.get('surveys', {})
-        survey_data = surveys.get(str(survey_id))
-        
         if not survey_data:
             logger.error(f"Survey not found with ID: {survey_id}")
             return jsonify({'error': 'Survey not found'}), 404
@@ -288,4 +287,54 @@ def delete_survey(survey_id):
 
     except Exception as e:
         logger.error(f"Error deleting survey: {str(e)}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+@survey.route('/submit-response', methods=['POST'])
+def submit_survey_response():
+    try:
+        user_id = session.get('user_id')
+        if not user_id:
+            logger.error("Unauthorized attempt to submit survey response")
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        data = request.get_json()
+        survey_id = data.get('surveyId')
+        responses = data.get('responses')
+        if not survey_id or responses is None:
+            logger.error("Missing surveyId or responses in submission")
+            return jsonify({'error': 'Missing surveyId or responses'}), 400
+
+        # Find the survey in all users (since the survey could belong to any user)
+        survey_creator = None
+        survey_data = None
+        for user in User.query.all():
+            surveys = user.surveys_generated.get('surveys', {}) if user.surveys_generated else {}
+            if str(survey_id) in surveys:
+                survey_creator = user
+                survey_data = surveys.get(str(survey_id))
+                break
+        if not survey_creator or not survey_data:
+            logger.error(f"Survey not found for ID: {survey_id}")
+            return jsonify({'error': 'Survey not found'}), 404
+
+        # Check if the survey is active (if is_active is set)
+        if 'is_active' in survey_data and not survey_data['is_active']:
+            logger.error(f"Survey {survey_id} is not active")
+            return jsonify({'error': 'Survey is not active'}), 403
+
+        # Append the response
+        response_entry = {
+            'user_id': user_id,
+            'timestamp': datetime.utcnow().isoformat(),
+            'responses': responses
+        }
+        if 'responses' not in survey_data:
+            survey_data['responses'] = []
+        survey_data['responses'].append(response_entry)
+        flag_modified(survey_creator, 'surveys_generated')
+        db.session.commit()
+        logger.info(f"Survey response submitted for survey {survey_id} by user {user_id}")
+        return jsonify({'message': 'Survey response submitted successfully'}), 200
+    except Exception as e:
+        logger.error(f"Error submitting survey response: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500 

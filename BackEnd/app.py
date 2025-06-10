@@ -9,6 +9,7 @@ import logging
 from flask_sqlalchemy import SQLAlchemy
 from routes.auth import auth
 from routes.survey import survey
+from routes.admin_db_viewer import admin_db_viewer
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -41,6 +42,7 @@ init_db(app)
 # Register blueprints
 app.register_blueprint(auth, url_prefix='/auth')
 app.register_blueprint(survey, url_prefix='/survey')
+app.register_blueprint(admin_db_viewer)
 
 # Main entry
 if __name__ == "__main__":

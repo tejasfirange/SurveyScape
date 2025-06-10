@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DB Viewer</title>
+    <script>
+        function showTable(table) {
+            fetch(`/admin/db-viewer/${table}`)
+                .then(res => res.json())
+                .then(data => {
+                    let html = '<table border="1"><tr>';
+                    data.columns.forEach(col => html += `<th>${col}</th>`);
+                    html += '</tr>';
+                    data.rows.forEach(row => {
+                        html += '<tr>';
+                        data.columns.forEach(col => html += `<td>${row[col]}</td>`);
+                        html += '</tr>';
+                    });
+                    html += '</table>';
+                    document.getElementById('table-data').innerHTML = html;
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Database Tables</h1>
+    <ul>
+        {% for table in tables %}
+            <li><a href="#" onclick="showTable('{{ table }}')">{{ table }}</a></li>
+        {% endfor %}
+    </ul>
+    <div id="table-data"></div>
+</body>
+</html> 

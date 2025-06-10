@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchSurveyById, submitSurveyResponse } from '../services/surveyService';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography, Button } from '@mui/material';
 
 const SurveyFill = () => {
   const { id } = useParams();
@@ -16,11 +16,16 @@ const SurveyFill = () => {
     const loadSurvey = async () => {
       try {
         const surveyData = await fetchSurveyById(id);
+        if (!surveyData.is_active) {
+          setError('This survey is no longer active.');
+          setLoading(false);
+          return;
+        }
         setSurvey(surveyData);
         // Initialize responses object with empty values
         const initialResponses = {};
-        surveyData.questions.forEach(question => {
-          initialResponses[question.id] = '';
+        surveyData.questions.forEach((question, index) => {
+          initialResponses[index] = question.type === 'multiple-choice' || question.type === 'checkbox' ? [] : '';
         });
         setResponses(initialResponses);
       } catch (err) {
@@ -34,21 +39,32 @@ const SurveyFill = () => {
     loadSurvey();
   }, [id]);
 
-  const handleResponseChange = (questionId, value) => {
+  const handleResponseChange = (questionIndex, value, questionType) => {
     setResponses(prev => ({
       ...prev,
-      [questionId]: value
+      [questionIndex]: questionType === 'multiple-choice' || questionType === 'checkbox' 
+        ? Array.isArray(prev[questionIndex]) 
+          ? value 
+          : [value]
+        : value
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!survey.is_active) {
+      setError('This survey is no longer active.');
+      return;
+    }
+
     setSubmitting(true);
+    setError(null);
 
     try {
-      const formattedResponses = Object.entries(responses).map(([questionId, answer]) => ({
-        questionId,
-        answer
+      // Format responses to match the expected structure
+      const formattedResponses = survey.questions.map((question, index) => ({
+        questionId: index,
+        answer: responses[index]
       }));
 
       await submitSurveyResponse(id, formattedResponses);
@@ -92,9 +108,22 @@ const SurveyFill = () => {
           bgcolor: 'rgba(255, 255, 255, 0.1)',
           borderRadius: '16px',
           textAlign: 'center',
-          color: '#ff6b6b'
+          color: '#ff6b6b',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2
         }}>
-          {error}
+          <Typography color="error">{error}</Typography>
+          <Button
+            onClick={() => navigate('/dashboard')}
+            sx={{
+              color: 'white',
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
+            }}
+          >
+            Return to Dashboard
+          </Button>
         </Box>
       </Box>
     );
@@ -191,7 +220,7 @@ const SurveyFill = () => {
 
           <form onSubmit={handleSubmit}>
             {survey.questions.map((question, index) => (
-              <Box key={question.id} sx={{ mb: 6 }}>
+              <Box key={index} sx={{ mb: 6 }}>
                 <Box sx={{
                   fontSize: '18px',
                   fontWeight: 'bold',
@@ -203,8 +232,8 @@ const SurveyFill = () => {
                 {question.type === 'text' && (
                   <input
                     type="text"
-                    value={responses[question.id] || ''}
-                    onChange={(e) => handleResponseChange(question.id, e.target.value)}
+                    value={responses[index] || ''}
+                    onChange={(e) => handleResponseChange(index, e.target.value, question.type)}
                     style={{
                       width: '100%',
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -228,17 +257,14 @@ const SurveyFill = () => {
                         padding: '8px',
                         borderRadius: '4px',
                         backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                        transition: 'background-color 0.2s',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255, 255, 255, 0.15)'
-                        }
+                        transition: 'background-color 0.2s'
                       }}>
                         <input
                           type="radio"
-                          name={`question-${question.id}`}
+                          name={`question-${index}`}
                           value={option}
-                          checked={responses[question.id] === option}
-                          onChange={(e) => handleResponseChange(question.id, e.target.value)}
+                          checked={responses[index] === option}
+                          onChange={(e) => handleResponseChange(index, e.target.value, question.type)}
                           required
                           style={{ marginRight: '12px' }}
                         />
@@ -258,26 +284,21 @@ const SurveyFill = () => {
                         padding: '8px',
                         borderRadius: '4px',
                         backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                        transition: 'background-color 0.2s',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255, 255, 255, 0.15)'
-                        }
+                        transition: 'background-color 0.2s'
                       }}>
                         <input
                           type="checkbox"
                           value={option}
-                          checked={responses[question.id]?.includes(option)}
+                          checked={Array.isArray(responses[index]) && responses[index].includes(option)}
                           onChange={(e) => {
-                            const currentResponses = responses[question.id] ? 
-                              (Array.isArray(responses[question.id]) ? responses[question.id] : [responses[question.id]]) : 
-                              [];
+                            const currentResponses = responses[index] || [];
                             let newResponses;
                             if (e.target.checked) {
                               newResponses = [...currentResponses, option];
                             } else {
                               newResponses = currentResponses.filter(r => r !== option);
                             }
-                            handleResponseChange(question.id, newResponses);
+                            handleResponseChange(index, newResponses, question.type);
                           }}
                           style={{ marginRight: '12px' }}
                         />
@@ -292,20 +313,20 @@ const SurveyFill = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !survey.is_active}
                 style={{
-                  backgroundColor: '#8B1EDE',
+                  backgroundColor: survey.is_active ? '#8B1EDE' : '#666',
                   color: 'white',
                   padding: '12px 24px',
                   borderRadius: '8px',
                   border: 'none',
-                  cursor: 'pointer',
+                  cursor: survey.is_active ? 'pointer' : 'not-allowed',
                   fontSize: '16px',
                   fontWeight: 'bold',
                   transition: 'background-color 0.2s'
                 }}
               >
-                Submit Survey
+                {submitting ? 'Submitting...' : 'Submit Survey'}
               </button>
             </Box>
           </form>

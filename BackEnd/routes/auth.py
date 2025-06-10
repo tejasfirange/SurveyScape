@@ -12,7 +12,6 @@ from google.auth.transport import requests as google_requests
 auth = Blueprint('auth', __name__)
 logger = logging.getLogger(__name__)
 
-# Get the secret key from environment or use default
 SECRET_KEY = os.environ.get('SECRET_KEY', 'SurveyScape.com')
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '1070008063276-240lsgv2pqd9nnhohjts1i3m5r8ke60o.apps.googleusercontent.com')
 
@@ -142,55 +141,55 @@ def logout():
         logger.error(f"Error during logout: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
 
-@auth.route('/api/auth/google', methods=['POST'])
-def google_auth():
-    try:
-        token = request.json.get('token')
-        if not token:
-            return jsonify({'error': 'No token provided'}), 400
+# @auth.route('/api/auth/google', methods=['POST'])
+# def google_auth(): # CURRENTLY NOT IMPLEMENTED 
+#     try:
+#         token = request.json.get('token')
+#         if not token:
+#             return jsonify({'error': 'No token provided'}), 400
             
-        idinfo = id_token.verify_oauth2_token(
-            token, 
-            google_requests.Request(), 
-            GOOGLE_CLIENT_ID,
-            clock_skew_in_seconds=10
-        )
+#         idinfo = id_token.verify_oauth2_token(
+#             token, 
+#             google_requests.Request(), 
+#             GOOGLE_CLIENT_ID,
+#             clock_skew_in_seconds=10
+#         )
         
-        email = idinfo['email']
-        user = User.query.filter_by(email=email).first()
+#         email = idinfo['email']
+#         user = User.query.filter_by(email=email).first()
         
-        if not user:
-            # Create new user if doesn't exist
-            username = ''.join(idinfo.get('name', '').split()).lower()
-            # Check if username exists and append number if it does
-            username_exists = User.query.filter_by(username=username).first()
-            if username_exists:
-                count = User.query.filter(User.username.like(f"{username}%")).count()
-                username = f"{username}{count}"
+#         if not user:
+#             # Create new user if doesn't exist
+#             username = ''.join(idinfo.get('name', '').split()).lower()
+#             # Check if username exists and append number if it does
+#             username_exists = User.query.filter_by(username=username).first()
+#             if username_exists:
+#                 count = User.query.filter(User.username.like(f"{username}%")).count()
+#                 username = f"{username}{count}"
                 
-            user = User(
-                email=email,
-                username=username,
-                name=idinfo.get('name', ''),
-                password=generate_password_hash('GOOGLE_AUTH_USER')
-            )
-            db.session.add(user)
-            db.session.commit()
+#             user = User(
+#                 email=email,
+#                 username=username,
+#                 name=idinfo.get('name', ''),
+#                 password=generate_password_hash('GOOGLE_AUTH_USER')
+#             )
+#             db.session.add(user)
+#             db.session.commit()
         
-        user.change_login_time()
+#         user.change_login_time()
         
-        return jsonify({
-            'user': {
-                'username': user.username,
-                'email': user.email,
-                'name': user.name
-            }
-        })
+#         return jsonify({
+#             'user': {
+#                 'username': user.username,
+#                 'email': user.email,
+#                 'name': user.name
+#             }
+#         })
         
-    except ValueError as e:
-        return jsonify({'error': 'Invalid token'}), 401
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+#     except ValueError as e:
+#         return jsonify({'error': 'Invalid token'}), 401
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 @auth.route('/api/auth/verify', methods=['GET'])
 def verify_token():

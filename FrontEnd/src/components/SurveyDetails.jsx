@@ -30,7 +30,7 @@ const SurveyDetails = () => {
     }, [id]);
 
     const handleCopyLink = () => {
-        const surveyUrl = `${window.location.origin}/survey/${id}`;
+        const surveyUrl = `${window.location.origin}/fill-msurvey/${id}`;
         navigator.clipboard.writeText(surveyUrl);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);

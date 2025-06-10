@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/auth': 'http://localhost:5000',
-      '/survey': 'http://localhost:5000'
+      '/survey': 'http://localhost:5000',
+      '/admin': 'http://localhost:5000'
     }
   }
 })

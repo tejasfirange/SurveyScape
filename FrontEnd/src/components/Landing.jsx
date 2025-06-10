@@ -232,8 +232,8 @@ function Landing() {
           <h4 className='lg:text-[25px] text-[20px] font-semibold leading-tight -mt-[5px] text-silver ml-[90px] lg:ml-[130px] transition-transform duration-300 hover:scale-110'>Scape</h4>
         </div>
         <div className='hidden lg:flex text-2xl gap-[20px] text-zinc-500 font-semibold'>
-          <Link to="/" className="hover:text-silver transition-colors duration-300">
-            <h1>Works</h1>
+          <Link to="/help" className="hover:text-silver transition-colors duration-300">
+            <h1>Help</h1>
           </Link>
           <Link to="/" className="hover:text-silver transition-colors duration-300">
             <h1>Contact</h1>

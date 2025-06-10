@@ -12,6 +12,7 @@ import SurveyDetails from './components/SurveyDetails';
 import SurveyFill from './components/SurveyFill';
 import SurveyAnalysis from './components/SurveyAnalysis';
 import PrivateRoute from './components/PrivateRoute';
+import Help from './components/Help';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
               <SurveyAnalysis />
             </PrivateRoute>
           } />
+          <Route path="/help" element={<Help />} />
         </Routes>
       </AuthProvider>
     </Router>
